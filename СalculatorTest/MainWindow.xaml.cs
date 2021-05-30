@@ -41,7 +41,7 @@ namespace СalculatorTest
             {
                 this.DragMove();
             }
-        }
+        } 
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
