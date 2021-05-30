@@ -1,0 +1,166 @@
+﻿<Window x:Class="СalculatorTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:СalculatorTest"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        Background="Black" 
+        WindowStyle="None" 
+        WindowStartupLocation="CenterScreen">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="CommandBinding_Executed"></CommandBinding>
+    </Window.CommandBindings>
+    <Window.Resources>
+
+        <Style TargetType="Button" x:Key="TriggerButton">
+            <Style.Triggers>
+                <Trigger Property="Button.IsMouseOver" Value="True">
+                    <Setter Property="Button.Background" Value="#FF708CA4"/>
+                </Trigger>
+                <Trigger Property="Button.IsPressed" Value="True">
+                    <Setter Property="Button.Opacity" Value="0.6"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="EllipseButton" TargetType="Button" BasedOn="{StaticResource TriggerButton}">
+            <Setter Property="Button.Width" Value="100"/>
+            <Setter Property="Button.Height" Value="100"/>
+            <Setter Property="Button.FontSize" Value="40"/>
+            <Setter Property="Button.Margin" Value="7"/>
+            <Setter Property="Button.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse  Fill="{TemplateBinding Button.Background}"></Ellipse>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="IconsTriggerRollUp" BasedOn="{StaticResource TriggerButton}">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Button.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Margin="5,0,5,0">
+                            <Rectangle Fill="Transparent"></Rectangle>
+                            <Line X1="0" Y1="20" X2="25" Y2="20" Stroke="#FFA5A5A5" StrokeThickness="4"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="IconsTriggerClose" BasedOn="{StaticResource TriggerButton}">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Button.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Margin="5,0,5,0">
+                            <Rectangle Fill="Transparent"></Rectangle>
+                            <Line X1="0" Y1="7" X2="20" Y2="23" Stroke="#FFA5A5A5" StrokeThickness="4"/>
+                            <Line X1="20" Y1="7" X2="0" Y2="23" Stroke="#FFA5A5A5"  StrokeThickness="4"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="RactangleButtonGray" BasedOn="{StaticResource EllipseButton}" TargetType="Button">
+            <Setter Property="Button.Width" Value="214"/>
+            <Setter Property="Button.Foreground" Value="White"/>
+            <Setter Property="Button.Background" Value="#FF333333"/>
+            <Setter Property="Button.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Rectangle Fill="{TemplateBinding Button.Background}" RadiusX="50" RadiusY="50"></Rectangle>
+                            <ContentPresenter Margin="40,0" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="EllipseButtonOrange" BasedOn="{StaticResource EllipseButton}" TargetType="Button">
+            <Setter Property="Button.Foreground" Value="White"/>
+            <Setter Property="Button.Background" Value="#FFFF9E0A"/>
+        </Style>
+
+        <Style x:Key="EllipseButtonWhite" BasedOn="{StaticResource EllipseButton}" TargetType="Button">
+            <Setter Property="Button.Foreground" Value="Black"/>
+            <Setter Property="Button.Background" Value="#FFA5A5A5"/>
+        </Style>
+
+        <Style x:Key="EllipseButtonGray" BasedOn="{StaticResource EllipseButton}" TargetType="Button">
+            <Setter Property="Button.Foreground" Value="White"/>
+            <Setter Property="Button.Background" Value="#FF333333"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="200"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.ColumnSpan="4" Grid.Row="0" MouseDown="Grid_MouseDown" Background="Transparent">
+            <Polygon Grid.ColumnSpan="4" Fill="#FFA5A5A5" 
+                 Points="90,0,
+                 114,20,
+                 342,20,
+                 366,0"
+                 ></Polygon>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource IconsTriggerRollUp}" Click="Button_Click_RollUp"/>
+                <Button Style="{StaticResource IconsTriggerClose}" Click="Button_Click_Close" Command="Close"/>
+            </StackPanel>
+        </Grid>
+        
+        <Label Grid.ColumnSpan="4" Grid.Row="1"></Label>
+
+        <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource EllipseButtonWhite}">AC</Button>
+        <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource EllipseButtonWhite}">+/-</Button>
+        <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource EllipseButtonWhite}">%</Button>
+        <Button Grid.Row="2" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">÷</Button>
+        <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">1</Button>
+        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">2</Button>
+        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">3</Button>
+        <Button Grid.Row="3" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">×</Button>
+        <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">4</Button>
+        <Button Grid.Row="4" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">5</Button>
+        <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">6</Button>
+        <Button Grid.Row="4" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">-</Button>
+        <Button Grid.Row="5" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">7</Button>
+        <Button Grid.Row="5" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">8</Button>
+        <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">9</Button>
+        <Button Grid.Row="5" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">+</Button>
+        <Button Grid.Row="6" Grid.ColumnSpan="2" Style="{StaticResource RactangleButtonGray}">0</Button>
+        <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">,</Button>
+        <Button Grid.Row="6" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">=</Button>
+    </Grid>
+</Window>
