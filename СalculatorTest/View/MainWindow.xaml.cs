@@ -25,27 +25,27 @@ namespace СalculatorTest
             InitializeComponent();
         }
 
-        private void Button_Click_Close(object sender, RoutedEventArgs e)
-        {
-            //this.Close();
-        }
+        //private void Button_Click_Close(object sender, RoutedEventArgs e)
+        //{
+        //    //this.Close();
+        //}
 
-        private void Button_Click_RollUp(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
+        //private void Button_Click_RollUp(object sender, RoutedEventArgs e)
+        //{
+        //    this.WindowState = WindowState.Minimized;
+        //}
 
-        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if(e.ChangedButton == MouseButton.Left)
-            {
-                this.DragMove();
-            }
-        } 
+        //private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (e.ChangedButton == MouseButton.Left)
+        //    {
+        //        this.DragMove();
+        //    }
+        //}
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.Close();
+            //this.Close();
         }
     }
 }

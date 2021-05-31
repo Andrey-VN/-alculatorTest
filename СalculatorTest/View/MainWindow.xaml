@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:СalculatorTest"
+        xmlns:vm="clr-namespace:СalculatorTest.ViewModel"
+        xmlns:cmd="clr-namespace:СalculatorTest.Infrastructure"
         mc:Ignorable="d"
         Title="MainWindow"
         SizeToContent="WidthAndHeight"
@@ -12,9 +14,10 @@
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen">
 
-    <Window.CommandBindings>
-        <CommandBinding Command="Close" Executed="CommandBinding_Executed"></CommandBinding>
-    </Window.CommandBindings>
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    
     <Window.Resources>
 
         <Style TargetType="Button" x:Key="TriggerButton">
@@ -128,7 +131,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.ColumnSpan="4" Grid.Row="0" MouseDown="Grid_MouseDown" Background="Transparent">
+        <Grid Grid.ColumnSpan="4" Grid.Row="0" Background="Transparent">
             <Polygon Grid.ColumnSpan="4" Fill="#FFA5A5A5" 
                  Points="90,0,
                  114,20,
@@ -136,31 +139,36 @@
                  366,0"
                  ></Polygon>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{StaticResource IconsTriggerRollUp}" Click="Button_Click_RollUp"/>
-                <Button Style="{StaticResource IconsTriggerClose}" Click="Button_Click_Close" Command="Close"/>
+                <Button Style="{StaticResource IconsTriggerRollUp}" />
+                <Button Style="{StaticResource IconsTriggerClose}" Command="{Binding CloseApplicationCommand}"/>
             </StackPanel>
         </Grid>
         
-        <Label Grid.ColumnSpan="4" Grid.Row="1"></Label>
+        <TextBlock Grid.ColumnSpan="4" Grid.Row="1" 
+                   Text="{Binding InputBox}"
+                   Foreground="White"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Bottom"
+                   FontSize="50"></TextBlock>
 
-        <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource EllipseButtonWhite}">AC</Button>
-        <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource EllipseButtonWhite}">+/-</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "AC" Grid.Row="2" Grid.Column="0" Style="{StaticResource EllipseButtonWhite}">AC</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "+/-" Grid.Row="2" Grid.Column="1" Style="{StaticResource EllipseButtonWhite}">+/-</Button>
         <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource EllipseButtonWhite}">%</Button>
         <Button Grid.Row="2" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">÷</Button>
-        <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">1</Button>
-        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">2</Button>
-        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">3</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "1" Grid.Row="3" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">1</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "2" Grid.Row="3" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">2</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "3" Grid.Row="3" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">3</Button>
         <Button Grid.Row="3" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">×</Button>
-        <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">4</Button>
-        <Button Grid.Row="4" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">5</Button>
-        <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">6</Button>
+        <Button  Command="{Binding ValueInputCommand}" CommandParameter= "4" Grid.Row="4" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">4</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "5" Grid.Row="4" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">5</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "6" Grid.Row="4" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">6</Button>
         <Button Grid.Row="4" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">-</Button>
-        <Button Grid.Row="5" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">7</Button>
-        <Button Grid.Row="5" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">8</Button>
-        <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">9</Button>
-        <Button Grid.Row="5" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">+</Button>
-        <Button Grid.Row="6" Grid.ColumnSpan="2" Style="{StaticResource RactangleButtonGray}">0</Button>
-        <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">,</Button>
-        <Button Grid.Row="6" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">=</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "7" Grid.Row="5" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">7</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "8" Grid.Row="5" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">8</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "9" Grid.Row="5" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">9</Button>
+        <Button Command="{Binding Sum}" Grid.Row="5" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">+</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "0" Grid.Row="6" Grid.ColumnSpan="2" Style="{StaticResource RactangleButtonGray}">0</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "," Grid.Row="6" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">,</Button>
+        <Button Command ="{Binding Equally}" Grid.Row="6" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">=</Button>
     </Grid>
 </Window>
