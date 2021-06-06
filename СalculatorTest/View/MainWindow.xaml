@@ -151,18 +151,18 @@
                    VerticalAlignment="Bottom"
                    FontSize="50"></TextBlock>
 
-        <Button Command="{Binding ValueInputCommand}" CommandParameter= "AC" Grid.Row="2" Grid.Column="0" Style="{StaticResource EllipseButtonWhite}">AC</Button>
+        <Button Command="{Binding Dis}" CommandParameter= "AC" Grid.Row="2" Grid.Column="0" Style="{StaticResource EllipseButtonWhite}">AC</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "+/-" Grid.Row="2" Grid.Column="1" Style="{StaticResource EllipseButtonWhite}">+/-</Button>
-        <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource EllipseButtonWhite}">%</Button>
-        <Button Grid.Row="2" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">÷</Button>
+        <Button Command="{Binding ValueInputCommand}" CommandParameter= "%" Grid.Row="2" Grid.Column="2" Style="{StaticResource EllipseButtonWhite}">%</Button>
+        <Button Command="{Binding Div}" Grid.Row="2" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">÷</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "1" Grid.Row="3" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">1</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "2" Grid.Row="3" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">2</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "3" Grid.Row="3" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">3</Button>
-        <Button Grid.Row="3" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">×</Button>
+        <Button Command="{Binding Multi}" Grid.Row="3" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">×</Button>
         <Button  Command="{Binding ValueInputCommand}" CommandParameter= "4" Grid.Row="4" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">4</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "5" Grid.Row="4" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">5</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "6" Grid.Row="4" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">6</Button>
-        <Button Grid.Row="4" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">-</Button>
+        <Button Command="{Binding Dif}" Grid.Row="4" Grid.Column="3" Style="{StaticResource EllipseButtonOrange}">-</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "7" Grid.Row="5" Grid.Column="0" Style="{StaticResource EllipseButtonGray}">7</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "8" Grid.Row="5" Grid.Column="1" Style="{StaticResource EllipseButtonGray}">8</Button>
         <Button Command="{Binding ValueInputCommand}" CommandParameter= "9" Grid.Row="5" Grid.Column="2" Style="{StaticResource EllipseButtonGray}">9</Button>
