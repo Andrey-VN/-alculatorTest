@@ -21,15 +21,18 @@ namespace СalculatorTest.ViewModel
             }
         }
         public ICommand CloseApplicationCommand { get; }
-        public ICommand ValueInputCommand { get; }
         public ICommand Sum { get; }
         public ICommand Equally { get; }       
         public ICommand Dif { get; }
         public ICommand Div { get; }
-        public ICommand Dis { get; }
         public ICommand Multi { get; }
+        public ICommand Number { get; }
+        public ICommand Comma { get; }
+        public ICommand Reset { get; }
+        public ICommand PlusOrMinus { get; }
+        public ICommand Percent { get; }
 
-        #region Комманды
+        #region Команды
         #region Закрыть окно
         private void OnCloseApplicationCommandExecuted(object parameter)
         {
@@ -42,32 +45,66 @@ namespace СalculatorTest.ViewModel
         }
         #endregion
 
+        #region Команды ввода
         #region Ввод цифр
-        private void OnValueInputCommandExecuted(object parameter)
+        private void OnNumberCommandExecuted(object parameter)
         {
             InputBox = ReciverOfOperation.GetInputValue(parameter as string, InputBox);
         }
 
-        private bool CanValueInputCommandExecute(object parameter)
+        private bool CanNumberCommandExecute(object parameter)
         {
-            //if (InputBox.IndexOf(",") >= 1)
-            //    return false;
+            return true;
+        }
+        #endregion
+        #region Ввод запятой
+        private void OnCommaCommandExecuted(object parameter)
+        {
+            InputBox = ReciverOfOperation.GetComma("Comma", InputBox);
+        }
+
+        private bool CanCommaCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+        #region Ввод плюс/минус
+        private void OnPlusOrMinusCommandExecuted(object parameter)
+        {
+            InputBox = ReciverOfOperation.GetPlusOrMinus("PlusOrMinus", InputBox);
+        }
+
+        private bool CanPlusOrMinusCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+        #region Ввод процента
+        private void OnPercentOrMinusCommandExecuted(object parameter)
+        {
+            InputBox = ReciverOfOperation.GetPercent("Percent", InputBox);
+        }
+
+        private bool CanPercentOrMinusCommandExecute(object parameter)
+        {
             return true;
         }
         #endregion
         #region Сброс
-        private void OnDisCommandExecuted(object parameter)
+        private void OnResetCommandExecuted(object parameter)
         {
-            ReciverOfOperation.ValueNull();
+            ReciverOfOperation.GetReset();
             InputBox = "0";
         }
 
-        private bool CanDisCommandExecute(object parameter)
+        private bool CanResetCommandExecute(object parameter)
         {
             return true;
         }
         #endregion
+        #endregion
 
+        #region Команды состояния
         #region Сумма
         private void OnSumCommandExecuted(object parameter)
         {
@@ -128,28 +165,152 @@ namespace СalculatorTest.ViewModel
             return true;
         }
         #endregion
+        #endregion
 
         #endregion
         public MainWindowViewModel()
         {
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
-            ValueInputCommand = new LambdaCommand(OnValueInputCommandExecuted, CanValueInputCommandExecute);
+            Number = new LambdaCommand(OnNumberCommandExecuted, CanNumberCommandExecute);
 
             Sum = new LambdaCommand(OnSumCommandExecuted, CanSumCommandExecute);
             Dif = new LambdaCommand(OnDifCommandExecuted, CanDifCommandExecute);
             Div = new LambdaCommand(OnDivCommandExecuted, CanDivCommandExecute);
             Multi = new LambdaCommand(OnMultiCommandExecuted, CanMultiCommandExecute);
-
             Equally = new LambdaCommand(OnEquallyCommandExecuted, CanEquallyCommandExecute);
-            Dis = new LambdaCommand(OnDisCommandExecuted, CanDisCommandExecute);
-            
+
+
+
+            Reset = new LambdaCommand(OnResetCommandExecuted, CanResetCommandExecute);
+            Comma = new LambdaCommand(OnCommaCommandExecuted, CanCommaCommandExecute);
+            PlusOrMinus = new LambdaCommand(OnPlusOrMinusCommandExecuted, CanPlusOrMinusCommandExecute);
+            Percent = new LambdaCommand(OnPercentOrMinusCommandExecuted, CanPercentOrMinusCommandExecute);
         }
 
 
     }
+    public abstract class NumberInput
+    {
+        public static string ValueStatic{ get; set; }
 
+        public static NumberInput Create(string type)
+        {
+            switch (type)
+            {
+                case "Number":
+                    {
+                        return new GetNumber();
+                    }
+                case "Comma":
+                    {
+                        return new GetComma();
+                    }
+                case "Reset":
+                    {
+                        return new GetReset();
+                    }
+                case "PlusOrMinus":
+                    {
+                        return new GetPlusOrMinus();
+                    }
+                case "Percent":
+                    {
+                        return new GetPercent();
+                    }
+                default:
+                    throw new ArgumentException();
+            }
+        }
+        public abstract string GetValue(string value, string inputBox);
+
+    }
+
+    
+    public class GetNumber : NumberInput
+    {
+        public override string GetValue(string value, string inputBox)
+        {
+            if (inputBox == "0" | inputBox == "-0" | ValueStatic == default)
+            {
+                if (inputBox == "-0")
+                {
+                    ValueStatic = "-" + value;
+                    return ValueStatic;
+                }
+                else
+                {
+                    ValueStatic = value;
+                    return ValueStatic;
+                }
+            }
+            else
+            {
+                ValueStatic = inputBox + value;
+                return ValueStatic;
+            }
+        }
+    }
+    public class GetComma : NumberInput
+    {
+        public override string GetValue(string value, string inputBox)
+        {
+            if (inputBox.IndexOf(",") >= 1)
+                return ValueStatic;
+            else
+            {
+                ValueStatic = inputBox + ",";
+                return ValueStatic;
+            }
+        }
+    }
+    public class GetReset : NumberInput
+    {
+        public override string GetValue(string value, string inputBox)
+        {
+            ValueStatic = default;
+            return ValueStatic;
+        }
+    }
+    public class GetPlusOrMinus : NumberInput
+    {
+        public override string GetValue(string value, string inputBox)
+        {
+           if (inputBox[0] != '-')
+            {
+                if (ValueStatic == default)
+                {
+                    ValueStatic = "-0";
+                    return ValueStatic;
+                }
+                ValueStatic = inputBox.Insert(0, "-");
+                return ValueStatic;
+            }
+            else if (inputBox[0] == '-')
+            {
+                if (ValueStatic == default)
+                {
+                    ValueStatic = "0";
+                    return ValueStatic;
+                }
+                ValueStatic = inputBox.Remove(0, 1);
+                return ValueStatic;
+            }
+            throw new ArgumentException();
+        }
+    }
+    public class GetPercent : NumberInput
+    {
+        public override string GetValue(string value, string inputBox)
+        {
+            ValueStatic = (Convert.ToDecimal(ValueStatic) / 100).ToString();
+            return ValueStatic;
+        }
+    }
+
+         
     public abstract class ReciverOfOperation
     {
+        protected static NumberInput numberInput;
         protected static bool IsEqually { get; set; }
         private static void EqualSignTest(string value)
         {
@@ -170,58 +331,44 @@ namespace СalculatorTest.ViewModel
         protected static string State { get; set; }
         protected static string ValueStaticA { get; set; }
         protected static string ValueStaticB { get; set; }
+        protected static string ValueStaticС { get; set; }
         public static string GetInputValue(string value, string inputBox)
         {
-
-            if ((inputBox == "0" | inputBox == "-0" | ValueStaticB == default) & value != "+/-" & value != "%" & value != ",")
-            {
-                if (inputBox == "-0")
-                {
-                    ValueStaticB = "-" + value;
-                    return ValueStaticB;
-                }
-                if (inputBox.IndexOf(",") >= 1 & value == ",")
-                {
-                    return ValueStaticB;
-                }
-                ValueStaticB = value;
-                return ValueStaticB;
-            }
-            else if (inputBox.IndexOf(",") >= 1 & value == ",")
-                return ValueStaticB;
-            else if (value == "%")
-            {
-                ValueStaticB = (Convert.ToDecimal(ValueStaticB) / 100).ToString();
-                return ValueStaticB;
-            }
-            else if (value == "+/-" & inputBox[0] != '-')
-            {
-                if (ValueStaticB == default)
-                {
-                    ValueStaticB = "-0";
-                    return ValueStaticB;
-                }
-                ValueStaticB = inputBox;
-                return ValueStaticB.Insert(0, "-"); ;
-            }
-            else if (value == "+/-" & inputBox[0] == '-')
-            {
-                if (ValueStaticB == default)
-                {
-                    ValueStaticB = "0";
-                    return ValueStaticB;
-                }
-                ValueStaticB = inputBox;
-                return ValueStaticB.Remove(0, 1);
-            }
-            return Concatenation(value, inputBox);
-
-        }
-        private static string Concatenation(string value, string inputBox)
-        {
-            ValueStaticB = inputBox + value;
+            numberInput = NumberInput.Create("Number");
+            ValueStaticB = numberInput.GetValue(value, inputBox);
             return ValueStaticB;
         }
+
+        public static string GetComma(string value, string inputBox)
+        {
+            numberInput = NumberInput.Create("Comma");
+            ValueStaticB = numberInput.GetValue(value, inputBox);
+            return ValueStaticB;
+        }
+        public static string GetPlusOrMinus(string value, string inputBox)
+        {
+            numberInput = NumberInput.Create("PlusOrMinus");
+            ValueStaticA = numberInput.GetValue(value, inputBox);
+            return ValueStaticA;
+        }
+        public static string GetPercent(string value, string inputBox)
+        {
+            numberInput = NumberInput.Create("Percent");
+            ValueStaticB = numberInput.GetValue(value, inputBox);
+            return ValueStaticB;
+        }
+
+        public static void GetReset()
+        {
+            numberInput = NumberInput.Create("Reset");
+            ValueStaticB = numberInput.GetValue(null, null);
+
+            State = default;
+            ValueStaticA = default;
+            ValueStaticB = default;
+            IsEqually = default;
+        }
+
         public static ReciverOfOperation Create(string type)
         {
             if (State == null)
@@ -238,10 +385,10 @@ namespace СalculatorTest.ViewModel
 
         public static void ValueNull()
         {
-            State = null;
+            State = default;
             ValueStaticA = default;
             ValueStaticB = default;
-            IsEqually = false;
+            IsEqually = default;
         }
         private static ReciverOfOperation CreateDependingOnTheState(string state)
         {
@@ -280,23 +427,43 @@ namespace СalculatorTest.ViewModel
     {
         public override string GetStateValue(string inputBox)
         {
+            if (ValueStaticA == default)
+            {
+                ValueStaticA = ValueStaticB;
+                NumberInput.ValueStatic = default;
+                ValueStaticB = default;
+                return ValueStaticA;
+            }
             decimal getValue = Convert.ToDecimal(ValueStaticA) + Convert.ToDecimal(ValueStaticB);
             ValueStaticA = getValue.ToString();
             if (IsEqually != true)
+            {
                 ValueStaticB = default;
+                NumberInput.ValueStatic = default;
+            }
             return getValue.ToString();
         }
     }
-
     public class GetTectDif : ReciverOfOperation
     {
         public override string GetStateValue(string inputBox)
         {
+            if (ValueStaticA == default)
+            {
+                ValueStaticA = ValueStaticB;
+                NumberInput.ValueStatic = default;
+                ValueStaticB = default;
+                return ValueStaticA;
+            }
             decimal getValue = Convert.ToDecimal(ValueStaticA) - Convert.ToDecimal(ValueStaticB);
             ValueStaticA = getValue.ToString();
 
             if (IsEqually != true)
+            {
                 ValueStaticB = default;
+                NumberInput.ValueStatic = default;
+            }
+                
 
             return getValue.ToString();
         }
@@ -309,11 +476,16 @@ namespace СalculatorTest.ViewModel
             if(ValueStaticA == default)
             {
                 ValueStaticA = ValueStaticB;
+                NumberInput.ValueStatic = default;
                 ValueStaticB = default;
                 return ValueStaticA;
             }
             if (ValueStaticB == default & IsEqually != true)
+            {
                 ValueStaticB = "1";
+                NumberInput.ValueStatic = "1";
+            }
+                
             if (ValueStaticB == "0")
                 return "Ошибка";
 
@@ -321,7 +493,10 @@ namespace СalculatorTest.ViewModel
             ValueStaticA = getValue.ToString();
 
             if (IsEqually != true)
+            {
                 ValueStaticB = default;
+                NumberInput.ValueStatic = default;
+            }
             return getValue.ToString();
         }
     }
@@ -332,17 +507,24 @@ namespace СalculatorTest.ViewModel
             if (ValueStaticA == default)
             {
                 ValueStaticA = ValueStaticB;
+                NumberInput.ValueStatic = default;
                 ValueStaticB = default;
                 return ValueStaticA;
             }
             if (ValueStaticB == default & IsEqually != true)
+            {
+                NumberInput.ValueStatic = "1";
                 ValueStaticB = "1";
-
+            }
+                
             decimal getValue = Convert.ToDecimal(ValueStaticA) * Convert.ToDecimal(ValueStaticB);
             ValueStaticA = getValue.ToString();
 
             if (IsEqually != true)
+            {
                 ValueStaticB = default;
+                NumberInput.ValueStatic = default;
+            }
             return getValue.ToString();
         }
     }
